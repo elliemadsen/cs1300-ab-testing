@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript">
+        var timerStart = Date.now();
+        console.log('Page Load:' + timerStart)
+        var uniq_session = timerStart;
+
+        var cookie = getCookie('uid');
+        var uniq_session = cookie;
+
+        if (cookie == '' || cookie == null) {
+          var uid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12);
+          console.log('uid:' + uid)
+          setCookie('uid', uid,  40)
+          cookie = getCookie('uid');
+          uniq_session = cookie;
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          var expires = "expires="+ d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+          var name = cname + "=";
+          var decodedCookie = decodeURIComponent(document.cookie);
+          var ca = decodedCookie.split(';');
+          for (var i = 0; i <ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0) == ' ') {
+                  c = c.substring(1);
+              }
+              if (c.indexOf(name) == 0) {
+                  return c.substring(name.length, c.length);
+              }
+          }
+          return "";
+        }
+
+        console.log('version A: cookie:' + cookie)
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- TODO: Feel free to modify anything inside main.css -->
+    <link rel="stylesheet" href="../static/mainA.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>cact-I + cact-you = cact-us</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>cact-I + cact-you = cact-us</h1>
+      <!-- Ideas: making it pretty/look real, making it look reliable,
+          choosing different images, changing layout, etc. Show your creativity!
+          We want to see meaningful differences -->
+      <!-- Feel free to beautify the site, and/or update the content-->
+      <i>An online succulent store
+        for your inner plant lady.
+      </i>
+    </header>
+
+    <!-- If you add any new buttons, you need to update the javascript file, for
+    corresponding button id, so that clicks of that button could be logged -->
+    <div class="content-pane">
+      <div class="vendor-wrapper" id="mp1">
+        <img src="../static/coppercombo.png" class="vendor-photo" />
+        <button class="vendor-book-button btn btn-primary" type="submit" id="mp1">
+          Add To Cart
+        </button>
+        <span><span id="mp1-added">0</span> in cart</span>
+        <p>Stunning succulent combo, featuring 3 adolescent cacti in
+          industrial copper pots. <i>$9.99</i>
+        </p>
+      </div>
+
+      <div class="vendor-wrapper" id="mp2">
+        <img src="../static/geoprickly.jpg" class="vendor-photo" />
+        <button class="vendor-book-button btn btn-primary" type="submit" id="mp2">
+          Add To Cart
+        </button>
+        <span><span id="mp2-added">0</span> in cart</span>
+        <p>Beautiful prickly pair in modern geometric pots. <i>$14.99</i>
+        </p>
+      </div>
+
+      <div class="vendor-wrapper" id="mp3">
+        <img src="../static/garden.jpg" class="vendor-photo" />
+        <button class="vendor-book-button btn btn-primary" type="submit" id="mp3">
+          Add To Cart
+        </button>
+        <span><span id="mp3-added">0</span> in cart</span>
+        <p>Cacti and succulent mini-garden in a congenial and rustic pot. <i>$25.99</i>
+        </p>
+      </div>
+
+      <div class="vendor-wrapper" id="mp4">
+        <img src="../static/garden-combo.jpg" class="vendor-photo" />
+        <button class="vendor-book-button btn btn-primary" type="submit" id="mp4">
+          Add To Cart
+        </button>
+        <span><span id="mp4-added">0</span> in cart</span>
+        <p>Cacti, succulent, and garden combo in handcrafted pots. <i>$34.99</i>
+        </p>
+      </div>
+
+      <div id="cart-wrapper">
+        <a onclick='navigateToCheckout()'>
+        <span id="cart" class="fa-stack fa-2x has-badge" data-count="0">
+          <i class="fa fa-circle fa-stack-2x fa-inverse"></i>
+          <i class="fa fa-shopping-cart fa-stack-2x red-cart"></i>
+        </span> CART
+      </a>
+      </div>
+    </div>
+
+    <!-- DO NOT EDIT below this line!! -->
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        var timeLoaded = Date.now()
+          $(document).ready(function() {
+            timeLoaded =  Date.now();
+            console.log('Page Load:' + timeLoaded)
+            sendData(timeLoaded, 0.0, 0.0, uniq_session)
+
+            // Update counts based on saved data in URL params.
+            // If you add more cacti, you'll want to update this to include them here.
+            if(window.location.href.includes('&')) {
+              addToCart('mp1', /* num = */ int(getParameterByName('mp1')));
+              addToCart('mp2', /* num = */ int(getParameterByName('mp2')));
+              addToCart('mp3', /* num = */ int(getParameterByName('mp3')));
+              addToCart('mp4', /* num = */ int(getParameterByName('mp4')));
+            }
+          });
+
+        $("#mp1").on("click", function(d) {
+              logClick('mp1')
+              addToCart('mp1');
+        })
+
+        $("#mp2").on("click", function(d) {
+              logClick('mp2')
+              addToCart('mp2');
+        })
+
+        $("#mp3").on("click", function(d) {
+              logClick('mp3')
+              addToCart('mp3');
+        })
+
+        $("#mp4").on("click", function(d) {
+              logClick('mp4')
+              addToCart('mp4');
+        })
+
+        function logClick(clickObjectID) {
+          var clickTime = Date.now()
+          console.log('Click Time:' + clickTime)
+          sendData(timeLoaded, clickTime, clickObjectID, uniq_session)
+        }
+
+        // Adds item with given id to the cart.
+        function addToCart(item, num = 1) {
+          countId = item + "-added";
+          document.getElementById(countId).textContent = parseInt(document.getElementById(countId).textContent, 0) + num;
+          incrementCartCount(val = num);
+        }
+
+        // Helper function for adding an item to the cart. Logically and visually increments the cart count.
+        function incrementCartCount(val = 1) {
+          var cartCount = parseInt(document.getElementById("cart")
+                                            .getAttribute('data-count')) + val;
+          document.getElementById("cart").setAttribute('data-count', cartCount.toString())
+        }
+
+        function int(str) {
+            return parseInt(str, 0);
+        }
+
+        function navigateToCheckout() {
+          // Send number of items in cart to checkout page through URL params.
+          params = 'version=A';
+          Array.from(document.getElementsByClassName('vendor-wrapper')).forEach(el => {
+            numInCart = parseInt(document.getElementById(el.id + '-added').textContent, 0);
+            params += ('&' + el.id + '=' + numInCart)
+          })
+          window.location.href = '/checkout?' + params;
+        }
+
+        function sendData(timeLoaded, clickTime, clickObjectID, cook){
+              var dataObj = { 'version': 'A', 'pageLoadTime': timeLoaded ,
+              'clickTime': clickTime , 'HtmlElementID': clickObjectID,
+              'UniqueSession' :uniq_session};
+              console.log(JSON.stringify(dataObj))
+               $.ajax({
+                   type: 'POST',
+                    url: '/data',
+                    async: false,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(dataObj),
+                    success: function(callback) {
+                        console.log(callback);
+                    },
+                    error: function() {
+                        $(this).html("error!");
+                    }
+              });
+        }
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+     </script>
+  </body>
+</html>

@@ -2,7 +2,7 @@
 
 <html>
   <head>
-    <title>INSERT TITLE HERE!</title>
+    <title>Responsive Redesign</title>
     <link rel="stylesheet" href="index.css">
     <!-- TODO: add additional links here! e.g. fonts, icons, more stylesheets, etc. -->
     <meta content="width=device-width, initial-scale=1" name="viewport" />
@@ -10,5 +10,56 @@
 
   <body>
     <!-- TODO: put your HTML code here! -->
+    <div class="title">
+      <h1> a/b testing </h1>
+    </div>
+      <div class="section">
+        <h2 class="heading"> A / B Interfaces </h2>
+        <p class="btext">I was given a simple interface (Version A) that allowed the user to purchase multiple cacti and view them in a shopping cart. I modified this webpage by increasing the image sizes and locating the items in a grid instead of a list (Version B). I then conducted an experiment to determine whether the improvements I made to the interface within Version B improved the site’s performance.</p>
+        <button class="button" onclick="window.open('templates/A.html','_blank')">Version A</button>
+        <button class="button" onclick="window.open('templates/B.html','_blank')">Version B</button>
+
+      </div>
+      <div class="section">
+        <h2 class="heading"> Hypotheses </h2>
+        <p class="btext">The two metrics I used to measure performance were (A) time to completion and (B) return rate.</p>
+        <p class="btext">I chose to implement a one-tailed test for each metric to analyze whether B performed better than A. I chose not to conduct a two-sided test because it would only tell me whether A and B performed differently, and I wanted to know specifically whether the changes I made to B made it perform better than A. </p>
+        <h4 class="btext">Metric 1: Time to completion</h4>
+        <ul class="btext">
+          <li>Null hypothesis: B did not have a shorter time to completion than A.</li>
+          <li>Alternative hypothesis: B had a shorter time to completion than A.</li>
+        </ul>
+        <h4 class="btext">Metric 2: Return rate</h4>
+        <ul class="btext">
+          <li>Null hypothesis: B did not have a higher return rate than A.</li>
+          <li>Alternative hypothesis: B had a higher return rate than A.</li>
+        </ul>
+
+      </div>
+      <div class="section">
+        <h2 class="heading"> Data Collection </h2>
+        <p class="btext">To collect data, I sent a link to 22 peers. The link randomly selected whether interface A or B was displayed on the website. Regardless of which version a user got, their task was to fill their cart with at least $150 of cacti or succulents.</p>
+        <p class="btext">The website was deployed on Heroku, which allowed me to access the site’s logs. The logs included the following attributes: timestamp, page, page load time, click time, ID of clicked element, and session ID. These attributes allowed me to calculate the time to completion and return rate for each session.</p>
+      </div>
+      <div class="section">
+        <h2 class="heading"> Statistical Tests </h2>
+        <p class="btext">I created a python script to calculate the t-score, chi-squared value, and p-value given a list of data.</p>
+        <h4 class="btext">Time to completion:</h4>
+        <ul class="btext">
+          <li>t-score: -1.0534</li>
+          <li>p-value: 0.1564</li>
+        </ul>
+        <h4 class="btext">Return rate:</h4>
+        <ul class="btext">
+          <li>chi-squared value: 0.1048</li>
+          <li>p-value: 0.7462</li>
+        </ul>
+        <p class="btext">Because the both p-values are greater than 0.05, I fail to reject the null hypothesis for both metrics. The data falls within the confidence interval of alpha=0.05.</p>
+        <p class="btext">This implies that Version B did not perform better than Version A with statistical significance.</p>
+      </div>
+      <div class="section">
+        <h2 class="heading">Results</h2>
+        <p class="btext">I learned that when conducting A/B tests it is important to gather a large amount of samples. I also learned that it is important to conduct the experiment in a manner such that the user is not encouraged to reach a certain threshold or complete a specific activity. In this experiment, each user was instructed to add $150 of cacti to their cart. This limitation likely affected the results. In the real world, this would be avoided as to not bias the data. My final takeaway is that it is better to conduct A/B tests on two versions that are slightly different rather than entirely different interfaces.</p>
+      </div>
   </body>
 </html>
