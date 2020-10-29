@@ -5,11 +5,13 @@ from scipy.stats import chi2
 from abtesting_test import *
 
 # You can comment out these lines! They are just here to help follow along to the tutorial.
+"""
 print(t_dist.cdf(-2, 20)) # should print .02963
 print(t_dist.cdf(2, 20)) # positive t-score (bad), should print .97036 (= 1 - .2963)
 
 print(chi2.cdf(23.6, 12)) # prints 0.976
 print(1 - chi2.cdf(23.6, 12)) # prints 1 - 0.976 = 0.023 (yay!)
+"""
 
 # TODO: Fill in the following functions! Be sure to delete "pass" when you want to use/run a function!
 # NOTE: You should not be using any outside libraries or functions other than the simple operators (+, **, etc)
@@ -111,11 +113,6 @@ def perform_2_sample_t_test(a, b):
     return t_dist.cdf(get_t_score(a,b), get_2_sample_df(a,b))
 
 
-# [OPTIONAL] Some helper functions that might be helpful in get_expected_grid().
-# def row_sum(observed_grid, ele_row):
-# def col_sum(observed_grid, ele_col):
-# def total_sum(observed_grid):
-# def calculate_expected(row_sum, col_sum, tot_sum):
 
 def row_sum(observed_grid, ele_row):
     sum = 0
@@ -213,6 +210,53 @@ def data_to_num_list(s):
     '''
   return list(map(float, s.split()))
 
+# t test on time to completion:
+a_time = """46680
+6603
+11236
+8148
+124902
+5389
+46582
+167616
+5601
+6152
+3293
+7882
+"""
+b_time = """222992
+199952
+5266
+16328
+7119
+327284
+11663
+4771
+4391
+3870
+"""
+a_time_list = data_to_num_list(a_time)
+b_time_list = data_to_num_list(b_time)
+print("t score:")
+print(get_t_score(a_time_list, b_time_list))
+print("p value:")
+print(perform_2_sample_t_test(a_time_list, b_time_list))
+
+
+# chi2 test on return rate:
+a_count = """4 8"""
+b_count = """4 6"""
+a_count_list = data_to_num_list(a_count)
+b_count_list = data_to_num_list(b_count)
+observed_grid = [a_count_list, b_count_list]
+
+print("chi2:")
+print(chi2_value(observed_grid))
+print("p value:")
+print(perform_chi2_homogeneity_test(observed_grid))
+
+
+"""
 # t_test 1:
 print("running tests . . .")
 a_t1_list = data_to_num_list(a1) 
@@ -232,9 +276,8 @@ a_t3_list = data_to_num_list(a3)
 b_t3_list = data_to_num_list(b3)
 print(get_t_score(a_t3_list, b_t3_list)) # this should be -2.88969
 print(perform_2_sample_t_test(a_t3_list, b_t3_list)) # this should be .005091
-"""
 
-"""
+
 # chi2_test 1:
 a_c1_list = data_to_num_list(a_count_1) 
 b_c1_list = data_to_num_list(b_count_1)
@@ -258,3 +301,4 @@ print(chi2_value(c3_observed_grid)) # this should be .3119402
 print(perform_chi2_homogeneity_test(c3_observed_grid)) # this should be .57649202
 
 
+"""
