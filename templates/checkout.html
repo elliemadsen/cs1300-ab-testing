@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<!-- DO NOT MAKE A/B CHANGES TO THIS FILE, AS IT IS USED FOR BOTH VERSIONS -->
+<html lang="en">
+  <head>
+    <script type="text/javascript">
+        var timerStart = Date.now();
+        console.log('Page Load:' + timerStart)
+        var uniq_session = timerStart;
+
+        var cookie = getCookie('uid');
+        var uniq_session = cookie;
+
+        if (cookie == '' || cookie == null) {
+          var uid = Math.random().toString(36).replace(/[^a-z]+/g, '').substr(0, 12);
+          console.log('uid:' + uid)
+          setCookie('uid', uid,  40)
+          cookie = getCookie('uid');
+          uniq_session = cookie;
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+          var d = new Date();
+          d.setTime(d.getTime() + (exdays*24*60*60*1000));
+          var expires = "expires="+ d.toUTCString();
+          document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+
+        function getCookie(cname) {
+          var name = cname + "=";
+          var decodedCookie = decodeURIComponent(document.cookie);
+          var ca = decodedCookie.split(';');
+          for (var i = 0; i <ca.length; i++) {
+              var c = ca[i];
+              while (c.charAt(0) == ' ') {
+                  c = c.substring(1);
+              }
+              if (c.indexOf(name) == 0) {
+                  return c.substring(name.length, c.length);
+              }
+          }
+          return "";
+        }
+
+        console.log('checkout: cookie:' + cookie)
+    </script>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="../static/mainA.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>cact-I + cact-you = cact-us</title>
+  </head>
+
+  <body>
+    <header>
+      <h1>cact-I + cact-you = cact-us</h1>
+      <i>An online succulent store
+        for your inner plant lady.
+      </i>
+    </header>
+
+    <div class="content-pane">
+      <h2>CART</h2>
+      <h4>Num Items: <span id="num-items">0</span></h4>
+      <h4>Cart Total: $<span id="cart-total">0</span></h4>
+      <button class="btn btn-primary" onclick="returnToShopping()">RETURN TO SHOPPING PAGE</button>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-1.12.0.min.js"></script>
+    <script>
+        var timeLoaded = Date.now()
+          $(document).ready(function() {
+            timeLoaded =  Date.now();
+            console.log('Page Load:' + timeLoaded)
+            sendData(timeLoaded, 0.0, 0.0, uniq_session)
+
+            // If you add more cacti, you'll want to update this to include them here, or make it extensible
+            // to apply to any number of items.
+            var numItems = int(getParameterByName('mp1')) + int(getParameterByName('mp2'))
+                           + int(getParameterByName('mp3')) + int(getParameterByName('mp4'));
+            var cartTotal = int(getParameterByName('mp1')) * 9.99
+                             + int(getParameterByName('mp2')) * 14.99
+                             + int(getParameterByName('mp3')) * 25.99
+                             + int(getParameterByName('mp4')) * 34.99;
+            document.getElementById('num-items').textContent = numItems;
+            document.getElementById('cart-total').textContent = cartTotal;
+            });
+
+        function int(str) {
+            return parseInt(str, 0);
+        }
+
+        function returnToShopping() {
+           params = window.location.href.split('?')[1];
+           window.location.href = '/?' + params;
+        }
+
+        function sendData(timeLoaded, clickTime, clickObjectID, cook){
+              var dataObj = { 'version': 'C', 'pageLoadTime': timeLoaded ,
+              'clickTime': clickTime , 'HtmlElementID': clickObjectID,
+              'UniqueSession' :uniq_session};
+              console.log(JSON.stringify(dataObj))
+               $.ajax({
+                   type: 'POST',
+                    url: '/data',
+                    async: false,
+                    dataType: 'json',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(dataObj),
+                    success: function(callback) {
+                        console.log(callback);
+                    },
+                    error: function() {
+                        $(this).html("error!");
+                    }
+              });
+        }
+
+        function getParameterByName(name, url) {
+            if (!url) url = window.location.href;
+            name = name.replace(/[\[\]]/g, '\\$&');
+            var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+     </script>
+  </body>
+</html>
